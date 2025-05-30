@@ -49,7 +49,25 @@ public class MathController {
     }
 
     //http://localhost:8080/math/division/3/5
+    @RequestMapping("/div/{numberOne}/{numberTwo}")
+    public Double div(
+            @PathVariable("numberOne") String numberOne,
+            @PathVariable("numberTwo") String numberTwo
+    ) throws Exception {
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo))throw new UnsupportedMatchOperationException("Please set a numeric value!");
+        return convertToDouble(numberOne) / convertToDouble(numberTwo);
+    }
 
+    //http://localhost:8080/math/pow/3/5
+    @RequestMapping("/pow/{numberOne}/{numberTwo}")
+    public Double pow(
+            @PathVariable("numberOne") String numberOne,
+            @PathVariable("numberTwo") String numberTwo
+    ) throws Exception {
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo))throw new UnsupportedMatchOperationException("Please set a numeric value!");
+        Double resultado = Math.pow(convertToDouble(numberOne) , convertToDouble(numberTwo));
+        return resultado;
+    }
 
-
+    //http://localhost:8080/match/media/../..
 }
