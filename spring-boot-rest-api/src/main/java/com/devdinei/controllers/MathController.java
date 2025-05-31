@@ -1,8 +1,12 @@
 package com.devdinei.controllers;
 
+import com.devdinei.exception.ExceptionResponse;
+import com.devdinei.exception.UnsupportedMatchOperationException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.ExecutionException;
 
 
 @RestController
@@ -15,19 +19,34 @@ public class MathController {
             @PathVariable("numberOne") String numberOne,
             @PathVariable("numberTwo") String numberTwo
     ) throws Exception {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo))throw new IllegalArgumentException();
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo))throw new UnsupportedMatchOperationException("Please set a numeric value!");
         return convertToDouble(numberOne) + convertToDouble(numberTwo);
     }
 
-    private boolean isNumeric(String numberOne) {
-        return true;
+    private boolean isNumeric(String strNumber) {
+        if (strNumber == null || strNumber.isEmpty()){
+            return false;
+        }
+        String number = strNumber.replace(",", ".");
+
+        return number.matches("[-+]?[0-9]*\\.?[0-9]+");
     }
 
-    private Double convertToDouble(String s) {
-        return 1D;
+    private Double convertToDouble(String strNumber) {
+        if (strNumber == null || strNumber.isEmpty()) throw new UnsupportedMatchOperationException("Please set a numeric value!");
+        String number = strNumber.replace(",", ".");
+        return Double.parseDouble(number);
     }
 
     //http://localhost:8080/math/subtration/3/5
+    @RequestMapping("/sub/{numberOne}/{numberTwo}")
+    public Double sub(
+            @PathVariable("numberOne") String numberOne,
+            @PathVariable("numberTwo") String numberTwo
+    ) throws Exception {
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo))throw new UnsupportedMatchOperationException("Please set a numeric value!");
+        return convertToDouble(numberOne) - convertToDouble(numberTwo);
+    }
 
     //http://localhost:8080/math/division/3/5
 
