@@ -1,73 +1,61 @@
 package com.devdinei.controllers;
 
-import com.devdinei.exception.ExceptionResponse;
-import com.devdinei.exception.UnsupportedMatchOperationException;
+import com.devdinei.services.MathService;
+import com.devdinei.services.SubStrategy;
+import com.devdinei.services.SumStrategy;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.ExecutionException;
 
 
 @RestController
 @RequestMapping("/math")
 public class MathController {
 
-    //http://localhost:8080/math/sum/3/5
+    //http://localhost:8080/math/sum/.../...
     @RequestMapping("/sum/{numberOne}/{numberTwo}")
     public Double sum(
-            @PathVariable("numberOne") String numberOne,
-            @PathVariable("numberTwo") String numberTwo
-    ) throws Exception {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo))throw new UnsupportedMatchOperationException("Please set a numeric value!");
-        return convertToDouble(numberOne) + convertToDouble(numberTwo);
+            @PathVariable String numberOne,
+            @PathVariable String numberTwo
+    ){
+        MathService sum = new MathService();
+        sum.setStrategy(new SumStrategy());
+        return sum.execute(numberOne, numberTwo);
     }
 
-    private boolean isNumeric(String strNumber) {
-        if (strNumber == null || strNumber.isEmpty()){
-            return false;
-        }
-        String number = strNumber.replace(",", ".");
-
-        return number.matches("[-+]?[0-9]*\\.?[0-9]+");
-    }
-
-    private Double convertToDouble(String strNumber) {
-        if (strNumber == null || strNumber.isEmpty()) throw new UnsupportedMatchOperationException("Please set a numeric value!");
-        String number = strNumber.replace(",", ".");
-        return Double.parseDouble(number);
-    }
-
-    //http://localhost:8080/math/subtration/3/5
+    //http://localhost:8080/math/sub/.../...
     @RequestMapping("/sub/{numberOne}/{numberTwo}")
     public Double sub(
-            @PathVariable("numberOne") String numberOne,
-            @PathVariable("numberTwo") String numberTwo
-    ) throws Exception {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo))throw new UnsupportedMatchOperationException("Please set a numeric value!");
-        return convertToDouble(numberOne) - convertToDouble(numberTwo);
+            @PathVariable String numberOne,
+            @PathVariable String numberTwo
+    ){
+        MathService sub = new MathService();
+        sub.setStrategy(new SubStrategy());
+        return sub.execute(numberOne, numberTwo);
     }
 
-    //http://localhost:8080/math/division/3/5
-    @RequestMapping("/div/{numberOne}/{numberTwo}")
-    public Double div(
-            @PathVariable("numberOne") String numberOne,
-            @PathVariable("numberTwo") String numberTwo
-    ) throws Exception {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo))throw new UnsupportedMatchOperationException("Please set a numeric value!");
-        return convertToDouble(numberOne) / convertToDouble(numberTwo);
+    //http://localhost:8080/math/multiply/.../...
+    @RequestMapping("/multiply/{numberOne}/{numberTwo}")
+    public Double multiply(
+            @PathVariable String numberOne,
+            @PathVariable String numberTwo
+    ){
+        MathService multiply = new MathService();
+        multiply.setStrategy(new SubStrategy());
+        return multiply.execute(numberOne, numberTwo);
     }
 
-    //http://localhost:8080/math/pow/3/5
-    @RequestMapping("/pow/{numberOne}/{numberTwo}")
-    public Double pow(
-            @PathVariable("numberOne") String numberOne,
-            @PathVariable("numberTwo") String numberTwo
-    ) throws Exception {
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo))throw new UnsupportedMatchOperationException("Please set a numeric value!");
-        Double resultado = Math.pow(convertToDouble(numberOne) , convertToDouble(numberTwo));
-        return resultado;
+    //http://localhost:8080/math/multiply/.../...
+    @RequestMapping("/average/{numberOne}/{numberTwo}")
+    public Double average(
+            @PathVariable String numberOne,
+            @PathVariable String numberTwo
+    ){
+        MathService average = new MathService();
+        average.setStrategy(new SubStrategy());
+        return average.execute(numberOne, numberTwo);
     }
 
-    //http://localhost:8080/match/media/../..
+
 }
